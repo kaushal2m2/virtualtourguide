@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react'
-// import {BrowserRouter} from 'react-router-dom'
-import {Grid} from '@material-ui/core'
+import {BrowserRouter} from 'react-router-dom'
 import Map from './components/map/map'
+import Guide from './components/guide/guide'
 
 function App() {
 
@@ -14,14 +14,15 @@ function App() {
   }, []);
 
   return (
-    <div className='h-full flex-1' style={{ height: '100vh', width: '100vw' }}>
-      <Grid container spacing={3}>
-          <Map
-              setCoordinates={setCoordinates}
-              coordinates={coordinates}
-          />
-      </Grid> 
-  </div>
+    <BrowserRouter>
+      <div className='relative flex w-screen h-screen'>
+        <Map
+            setCoordinates={setCoordinates}
+            coordinates={coordinates}
+        />
+        < Guide />
+    </div>
+  </BrowserRouter>
     
   )
 }
