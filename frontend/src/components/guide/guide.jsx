@@ -1,57 +1,33 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import Typewriter from 'typewriter-effect';
-import { useTypewriter, Cursor } from 'react-simple-typewriter';
 
-// const Process = ({loc, res, setRes}) => {
-//     // useEffect(() =>{
-//     //     setRes("W")
-//     //     console.log("e")
-//     // }, [])
+function filter(text) {
+    const arr = text.split(" ");
+    const lineSize = 50;
+    const ans = [];
+    var curr = "";
+    for (var i = 0; i < arr.length; i++) {
+        if (curr.length + arr[i].length > lineSize) {
+            ans.push(curr);
+            curr = "";
+        }
+        if (arr[i].length > lineSize) {
+            var temp = arr[i];
+            while (temp.length > lineSize) {
+                ans.push(temp.substring(0, lineSize));
+                temp = temp.substring(lineSize);
+            }
+            curr = temp + " ";
+            continue;
+        }
+        curr += arr[i] + " ";
+    }
+    var ret = "";
+    ans.map((line) => { ret += line + "\n" });
+    return ret;
+}
 
-//     // function load () {
-//     //     // try {
-//     //     //     console.log("s")
-//     //     //     const response = await fetch("/api/generate", {
-//     //     //         method: "POST",
-//     //     //         headers: {
-//     //     //             "Content-Type": "application/json",
-//     //     //         },
-//     //     //         body: loc,
-//     //     //     })
-//     //     //     console.log(response)
-//     //     //     const data = await response.json();
-//     //     //     if (response.status !== 200) {
-//     //     //         throw new Error(`Request failed with status ${response.status}`);
-//     //     //     }
-//     //     //     setRes(data.result);
-//     //     //     console.log("wow")
-//     //     // } catch(error) {
-//     //     //     // Consider implementing your own error handling logic here
-//     //     //     console.error(error);
-//     //     //     // alert(error.message);
-//     //     // }
-//     //     setRes("WSP")
-//     // }
-    
-//     // console.log(res)
-//     // const r = res;
-//     const {text} = useTypewriter({
-//         words: ['Hello', 'World', 'Simple', 'Typewriter'],
-//         loop: {}
-//     })
-
-
-//     return (
-//     <div>
-//         <h1 className='text-3xl font-bold'>
-//             {text}
-//         </h1>
-//         <Cursor/>
-//     </div>
-//     )
-// }
-
-function Guide ({coordinates}) {
+function Guide({ coordinates }) {
     const geocoder = new google.maps.Geocoder();
 
     const [loc, setLoc] = useState('')
@@ -60,59 +36,63 @@ function Guide ({coordinates}) {
     const [res, setRes] = useState()
     const [load, setLoad] = useState(true)
 
-    geocoder.geocode({ location: coordinates }).then((response) =>{
+    geocoder.geocode({ location: coordinates }).then((response) => {
         setLoc(response.results[6].formatted_address)
-        if(loc != ''){
-        setPrm(`Pretend you are a tour guide in ${loc}. 
-        What would you tell a tourist who is new to the area? 
-        Give a history and important sites and events in ${loc}, 
-        and write it in a conversation form, 
-        as if you are lecturing/talking to the tourist`)
-        //console.log(prm)
-        setOnce(true)
+        if (loc != '') {
+            setPrm(`I'm visiting ${loc}. 
+            What can you tell a tourist who is new to the area? 
+            Give a history and important sites and events in ${loc}`)
+            setOnce(true)
         }
     })
 
     useEffect(() => {
-        ld()
+        //ld()
+        //switched to hard coded response for now
+        setRes("Cupertino,locatedintheheartofSiliconValley,isavibrantcityinSantaClaraCounty, California. Known for its innovative technology companies, beautiful landscapes, and diverse community, Cupertino offers a range of attractions for visitors.  History: Cupertino's history dates back to the mid-19th century when it was primarily an agricultural region. The area saw significant growth during the early 20th century, attracting settlers who established orchards and vineyards. In the 1950s, Cupertino")
+        setLoad(false)
     }, [once])
 
-    async function ld(){
-        if(loc === ''){
+    async function ld() {
+        if (loc === '') {
             return;
         }
-        //console.log(JSON.stringify({prm, }))
+
         try {
             const response = await fetch("http://localhost:8080/api/v1/generate", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({prm, }),
+                body: JSON.stringify({ prm, }),
             })
 
             const data = await response.json();
-            console.log("data",data)
             if (response.status !== 200) {
                 throw new Error(`Request failed with status ${response.status}`);
             }
             setRes(data.result);
             setLoad(false)
-        } catch(error) {
-            // Consider implementing your own error handling logic here
+        } catch (error) {
             console.error(error);
-            // alert(error.message);
         }
-    }  
+    }
 
-    if(load){
+    if (load) {
         return (<div>Loading...</div>)
     }
 
     return (
-        <div className='px-8 py-8 w-[30%] h-fixed overflow-y-auto'>
-            {/* <Process loc={loc} res={res} setRes={setRes}/> */}
-            {res}
+        <div className='px-8 py-8 w-[30%] h-fixed overflow-y-auto text-ellipses bg-guide-back'>
+            <span className='text-black font-bold font-poppins'>
+                <Typewriter
+                    onInit={(typewriter) => {
+                        typewriter.changeDelay(50)
+                            .typeString(filter(res))
+                            .start();
+                    }}
+                />
+            </span>
         </div>
     )
 }
