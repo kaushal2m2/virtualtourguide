@@ -5,10 +5,6 @@ import {marker} from '../../assets';
 import mapstyles from './mapstyles';
 
 const Map= ({ setCoordinates, coordinates, curr}) => {
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ location: coordinates }).then((response) =>{
-        console.log(response.results[6].formatted_address)
-    })
     return (
     <div className='h-full w-[70%]'>
         <GoogleMapReact

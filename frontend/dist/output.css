@@ -568,8 +568,9 @@ video {
   overflow-y: auto;
 }
 
-.bg-guide-back{
-  background-image: url('/src/assets/bg.png');
+.bg-sky-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(14 165 233 / var(--tw-bg-opacity));
 }
 
 .px-8{
@@ -582,9 +583,13 @@ video {
   padding-bottom: 2rem;
 }
 
-.text-black{
-  --tw-text-opacity: 1;
-  color: rgb(0 0 0 / var(--tw-text-opacity));
+.text-3xl{
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.font-bold{
+  font-weight: 700;
 }
 
 :root {

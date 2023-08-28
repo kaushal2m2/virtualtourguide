@@ -19,12 +19,12 @@ function App() {
   return (
     <BrowserRouter>
       <div className='relative flex w-screen h-screen'>
-        <Map
+        {/* <Map
             setCoordinates={setCoordinates}
             coordinates={coordinates}
             curr={curr}
-        />
-        < Guide />
+        /> */}
+        < Guide coordinates={coordinates}/>
     </div>
   </BrowserRouter>
     
