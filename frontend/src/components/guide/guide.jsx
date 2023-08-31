@@ -83,7 +83,7 @@ function Guide({ coordinates }) {
     }
 
     return (
-        <div className='px-8 py-8 w-[30%] h-fixed overflow-y-auto text-ellipses bg-guide-back'>
+        <div className='px-8 py-8 w-[30%] h-fixed overflow-y-auto bg-guide-back'>
             <span className='text-black font-bold font-poppins'>
                 <Typewriter
                     onInit={(typewriter) => {
